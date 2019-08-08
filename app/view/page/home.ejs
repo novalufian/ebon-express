@@ -1,0 +1,137 @@
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column margin-top-100 page-fade-in">
+
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Begin Page Content -->
+                <div class="container-fluid start-screen h-100 row">
+                    <div class="tiles-area clear" id="admin-section" style="display: none">
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="General">
+                            <div data-role="tile" data-page="blok-lapas" class="bg-gradient-warning navigate-spa">
+                                <span class="fa fa-bars icon"></span>
+                                <span class="branding-bar">Blok Lapas</span>
+                            </div>
+                            <div data-role="tile" data-page="bon-napi" class="bg-gradient-info navigate-spa">
+                                <span class="fa fa-book-reader icon"></span>
+                                <span class="branding-bar">Bon napi </span>
+                            </div>
+                            <div data-role="tile" data-page="bon-riwayat" data-size="wide" class="bg-gradient-danger navigate-spa">
+                                <span class="fa fa-history icon"></span>
+                                <span class="branding-bar">Riwayat bon napi</span>
+                            </div>
+                            <div data-role="tile"  data-size="small">
+                                <span class="fa fa-book icon"></span>
+                            </div>
+                        </div>
+
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="User management">
+                            <div data-role="tile" data-page="user-client" class="bg-gradient-success navigate-spa">
+                                <span class="fa fa-user-friends icon"></span>
+                                <span class="branding-bar">User client</span>
+                            </div>
+                            <div data-role="tile" data-page="user-admin" class="bg-gradient-primary navigate-spa">
+                                <span class="fa fa-user-shield icon"></span>
+                                <span class="branding-bar">User admin </span>
+                            </div>
+                        </div>
+
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="Master management">
+                            <div data-role="tile" data-page="data-pegawai" class="bg-gradient-warning" data-size="wide navigate-spa">
+                                <span class="fa fa-sitemap icon"></span>
+                                <span class="branding-bar">Data pegawai</span>
+                            </div>
+                            <div data-role="tile" data-page="data-napi" class="bg-gradient-secondary navigate-spa">
+                                <span class="fa fa-user-secret icon"></span>
+                                <span class="branding-bar">Data Napi </span>
+                            </div>
+                            <div data-role="tile" data-page="data-subagian" class="bg-gradient-info navigate-spa">
+                                <span class="fa fa-landmark icon"></span>
+                                <span class="branding-bar">Data Subagian </span>
+                            </div>
+                            <div data-role="tile" data-page="data-kamar" class="bg-gradient-primary navigate-spa">
+                                <span class="fa fa-bed icon"></span>
+                                <span class="branding-bar">Data kamar</span>
+                            </div>
+
+                            <div data-role="tile" data-page="data-blok" class="bg-gradient-light navigate-spa">
+                                <span class="fa fa-building icon"></span>
+                                <span class="branding-bar">Data Blok</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="tiles-area clear" id="user-section" style="display: none">
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="General">
+                            <div data-role="tile" data-page="blok-lapas" data-size="wide" class="bg-gradient-warning navigate-spa">
+                                <span class="fa fa-bars icon"></span>
+                                <span class="branding-bar">Blok Lapas</span>
+                            </div>
+                        </div>
+
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="User management">
+                            <div data-role="tile" data-page="bon-napi" data-size="wide" class="bg-gradient-info navigate-spa">
+                                <span class="fa fa-book-reader icon"></span>
+                                <span class="branding-bar">Bon napi </span>
+                            </div>
+                        </div>
+
+                        <div class="tiles-grid tiles-group size-2 fg-white" data-group-title="Master management">
+                            <div data-role="tile" data-page="bon-riwayat" data-size="wide" class="bg-gradient-danger navigate-spa">
+                                <span class="fa fa-history icon"></span>
+                                <span class="branding-bar">Riwayat bon napi</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- /.container-fluid -->
+                </div>
+                <!-- End of Main Content -->
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <script>
+           document.getElementById("admin-section").style = 'display : blok !important';
+           document.getElementById("user-section").style.display = 'none';
+
+            $(".navigate-spa").each(function (i, e) {
+                if (!Boolean(e.getAttribute("data-adding-event"))) {
+                    e.addEventListener("click", navigate_page);
+                    e.setAttribute("data-adding-event", "true");
+                }
+            })
+
+            function navigate_page() {
+                var page = this.getAttribute("data-page");
+                loadPage(page);
+            }
+        
+            function loadPage(page) {
+                preloading_show();
+                var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "http://localhost:3000/content/"+page,
+                    "method": "GET",
+                    "headers": {
+                    "cache-control": "no-cache",
+                    "postman-token": "88a0360a-0123-1878-1700-989edee26a99"
+                    }
+                }
+
+                $.ajax(settings).done(function (response) {
+                    $('#template-content-section').html(response);
+                    preloading_hide();
+                });
+            }
+
+            function preloading_show() {
+                $('#template-preloading').css("top", "0px");
+            }
+            function preloading_hide() {
+                $('#template-preloading').css("top", "-200vh");
+            }
+       </script>

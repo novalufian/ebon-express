@@ -1,0 +1,117 @@
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column margin-top-100 page-fade-in">
+
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Begin Page Content -->
+                  <div class="container-fluid start-screen h-100 row">
+                  	<div class="card shadow mb-4">
+                        <div class="card-header py-3 ">
+					<div class="row">
+						<h3 class="m-0 font-weight-bold text-primary col-md-4">Data napi lapas</h3>
+						<h3 class="m-0 font-weight-bold text-success col-md-2">Filter : </h3>
+                        <button class="btn btn-success" id="btn-reset-filter">reset filter</button>
+						<select id="select_blok" class="form-control col-md-2 padding-10-inset">
+							<option selected="true" value="">----</option>
+						</select>
+						<select name="napi_kamar" id="napi_kamar_wrapper" class="form-control col-md-2">
+							<option value="undefined">select</option>
+							
+						</select>
+					</div>
+                        </div>
+                        <div class="card-body row">
+                            <div class="table-responsive col-md-9">
+                                <table class="table table-bordered table-list-napi" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Napi Id</th>
+                                            <th>No Registrasi</th>
+                                            <th>Nama</th>
+                                            <th>Kamar</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Napi Id</th>
+                                            <th>No Registrasi</th>
+                                            <th>Nama</th>
+                                            <th>Kamar</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody id="oke-disini">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            	<div class="col-md-3">
+	                			    <table class="table table-update-diagram-napi">
+	                            		
+	                            	</table>
+                            	</div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button class="btn btn-success btn-icon-split navigate-spa" data-page="page/bon-napi.html">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span class="text">Proses bon napi</span>
+                            </button>
+                        </div>
+                    </div>    
+            	</div>
+            <!-- End of Main Content -->
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- <script src="../../assets/js/demo/datatables-demo.js"></script> -->
+
+    <script>
+        boot_blok_lapas();
+        console.log('baru')
+
+        function boot_blok_lapas() {
+            var settings = {
+                    "async": true,
+                    "crossDomain": true,
+                    "url": "http://localhost:3000/napi/",
+                    "method": "GET",
+                    "headers": {
+                    "cache-control": "no-cache",
+                    "postman-token": "88a0360a-0123-1878-1700-989edee26a99"
+                    }
+                }
+
+                $.ajax(settings).done(function (napis) {
+                    console.log(napis);
+                    var dataNapiContainerEl = document.getElementById('dataNapiContainerEl').innerHTML;
+                    var html = ejs.render(dataNapiContainerEl, { napis: napis.data });
+                    document.getElementById("oke-disini").innerHTML = html;
+                });
+        }
+    </script>
+
+
+<script id="dataNapiContainerEl" type="text/template">
+    <% if (napis.length) { %>
+        <% napis.forEach(function(napi){ %>
+            <tr>
+                <td><%= napi.napi_id %></td>
+                <td><%= napi.napi_no_reg %></td>
+                <td><%= napi.napi_nama %></td>
+                <td><%= napi.blok_nama + ' / '+napi.nama_kamar %></td>
+                <td><%= napi.blok_nama + ' / '+napi.nama_kamar %></td>
+            </tr>
+        <% }) %>
+    <% } %>
+</script>
+<script>
+    
+</script>
+
