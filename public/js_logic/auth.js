@@ -1,4 +1,14 @@
 $(window).ready(function () {
+
+    cek_login();
+
+    function cek_login() {
+        var thisuser = window.localStorage.getItem("this_user");
+        if (thisuser !== null) {
+            $('#template-login-section').css("top","-200vh");
+            $('#template-preloading').css("top", "-200vh");
+        }
+    }
     document.querySelector("#btn-login").addEventListener("click", function () {
         var loginData = $("#form-login").serializeArray();
         var parseLoginData = [];
@@ -31,6 +41,7 @@ $(window).ready(function () {
             console.log(response);
             $('#template-login-section').css("top","-200vh");
             $('#template-preloading').css("top", "-200vh");
+            window.localStorage.setItem("this_user", JSON.stringify(response))
         })
         .fail(function (err) {
             console.log(err)

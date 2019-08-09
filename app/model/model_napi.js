@@ -1,15 +1,16 @@
 module.exports = {
-	get_all_napi_published : function (con, cb) {
+	get_all_napi_published : function (con, offset, cb) {
 		con.query(
 			{
 				sql : `SELECT * FROM data_napi 
 					 LEFT JOIN master_kamar ON data_napi.napi_kamar = master_kamar.master_kamar_id 
 					 LEFT JOIN master_blok ON master_kamar.master_blok_id = master_blok.blok_master_id 
 					 LEFT JOIN master_subagian ON data_napi.napi_booked_by = master_subagian.subagian_id
-					 WHERE ? AND ?`,
+					 WHERE ?
+					 LIMIT 10 OFFSET ${offset}
+					 `,
 				values : [
 					{'data_napi.napi_published' : 1},
-					{'data_napi.napi_booked' : 0}
 				]
 			},function (err, res, fields) {
 				var r= resData("get data pegawai ", err, res, fields);
@@ -18,17 +19,18 @@ module.exports = {
 		)
 	},
 
-	get_all_napi_by_kamarid : function (con, kamarid, cb) {
+	get_all_napi_by_kamarid : function (con, kamarid,offset, cb) {
 		con.query(
 			{
 				sql : `SELECT * FROM data_napi 
 					 LEFT JOIN master_kamar ON data_napi.napi_kamar = master_kamar.master_kamar_id 
 					 LEFT JOIN master_blok ON master_kamar.master_blok_id = master_blok.blok_master_id 
 					 LEFT JOIN master_subagian ON data_napi.napi_booked_by = master_subagian.subagian_id
-					 WHERE ? AND ? AND ?`,
+					 WHERE ? AND ? 
+					 LIMIT 10 OFFSET ${offset}
+					 `,
 				values : [
 					{'data_napi.napi_published' : 1},
-					{'data_napi.napi_booked' : 0},
 					{'data_napi.napi_kamar' : kamarid},
 				]
 			},function (err, res, fields) {
@@ -79,6 +81,7 @@ module.exports = {
 	},
 
 	book_napi : function (con, credentials, cb) {
+		console.log(credentials)
 		con.query(
 			{
 				sql : `UPDATE data_napi SET ? WHERE ?`,
@@ -87,11 +90,11 @@ module.exports = {
 						'napi_booked' : credentials.napi_booked,
 						'napi_booked_by' : credentials.napi_booked_by,
 					},{
-						'napi_id' : credentials.id,
+						'napi_id' : credentials.napi_id,
 					}
 				]
 			},function (err, res, fields) {
-				var r= resData(`booked napi ${credentials.id} `, err, res, fields);
+				var r= resData(`booked napi ${credentials.napi_id} `, err, res, fields);
 				cb(r);
 			}
 		)
@@ -135,12 +138,12 @@ module.exports = {
 	},
 
 	count_all_napi_by_subag : function (con, subag, kamarid, cb) {
-		var add_q = (kamarid !== null) ? 'AND ?' : '';
+		var add_q = (kamarid !== "null") ? 'AND ?' : '';
 		var _values = [
 			{'data_napi.napi_published' : 1},
 			{'data_pegawai.subag_pegawai' : subag},
 		]
-		if (kamarid !== null) {
+		if (kamarid !== "null") {
 			_values = [
 				{'data_napi.napi_published' : 1},
 				{'data_pegawai.subag_pegawai' : subag},
@@ -162,7 +165,7 @@ module.exports = {
 	},
 
 	count_all_napi : function (con, kamarid ,cb) {
-		var add_q = (kamarid !== null) ? 'AND ?' : '';
+		var add_q = (kamarid !== "null") ? 'AND ?' : '';
 		var _values = [{'napi_published' : 1}]
 		if (kamarid !== null) {
 			_values = [
@@ -182,7 +185,7 @@ module.exports = {
 	},
 
 	count_all_napi_unbooked : function (con, kamarid ,cb) {
-		var add_q = (kamarid !== null) ? 'AND ?' : '';
+		var add_q = (kamarid !== "null") ? 'AND ?' : '';
 		var _values = [
 			{'napi_published' : 1},
 			{'napi_booked' : 0}
