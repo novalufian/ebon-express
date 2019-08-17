@@ -43,6 +43,7 @@ module.exports = {
             }
         )
     }, 
+
     get_all_data_by_user : function (con, userid, cb) {
         con.query(
             {
@@ -61,10 +62,6 @@ module.exports = {
             }
         )
     },
-
-    // function get_all_by_subagian() {
-    //  // body...
-    // },
 
     get_by_id : function (con, bonid, cb) {
         con.query(
@@ -108,6 +105,7 @@ module.exports = {
             }
         )
     },
+
     update_bon_status : function (con, credentials, cb) {
         con.query(
             {

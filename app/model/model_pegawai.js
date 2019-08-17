@@ -10,6 +10,7 @@ module.exports = {
 			}
 		)
 	},
+	
 	get_one_pegwai : function(con, id, cb) {
 		con.query(
 			{

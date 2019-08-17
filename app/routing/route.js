@@ -7,6 +7,9 @@ const _napi = require('../controller/napi');
 const _kamar = require('../controller/kamar');
 const _blok = require('../controller/blok');
 const _subag = require('../controller/subag');
+const _bon = require('../controller/bon');
+const _user = require('../controller/user');
+const _pegawai = require('../controller/pegawai');
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -28,7 +31,27 @@ routes.post('/login', urlencodedParser, function (req, res) {
 
 // bon
 routes.get('/bon', (req, res) => {
-	res.render('index');
+	_bon.getAll(function (data) {res.send(data)})
+});
+routes.get('/bon/user', (req, res) => {
+	_bon.getByUser(function (data) {res.send(data)})
+});
+routes.get('/bon/:bonid', (req, res) => {
+	var id = req.params.bonid;
+	_bon.getById(id, function (data) {res.send(data)})
+});
+routes.post('/bon',urlencodedParser,  (req, res) => {
+	var cred = req.body;
+	_bon.getAll(cred, function (data) {res.send(data)})
+});
+routes.put('/bon/:bonid',urlencodedParser,  (req, res) => {
+	var cred = req.body;
+	var id = req.params.bonid;
+	// _bon.update(cred, id , function (data) {res.send(data)})
+});
+routes.put('/bon/status',urlencodedParser,  (req, res) => {
+	var cred = req.body;
+	_bon.updateStatus(cred , function (data) {res.send(data)})
 });
 
 // data napi 
@@ -126,6 +149,53 @@ routes.delete('/subag/:id', (req, res) => {
 	_subag.getAll(id , function(data) {res.send(data)}); 
 });
 
+// user
+routes.get('/user/role/:roleuser', (req, res) => {
+	var role = req.params.rolesuer;
+	_user.getAll(role, function (data) {res.send(data)})
+})
+routes.get('/user/:id/:roleuser', (req, res) => {
+	var role = req.params.rolesuer;
+	var id = req.params.id;
+	_user.getOne(id, role, function (data) {res.send(data)})
+})
+routes.get('/user/:id', (req, res) => {
+	var id = req.params.id;
+	_user.getById(id, function (data) {res.send(data)})
+})
+routes.delete('/user/:id', (req, res) => {
+	var id = req.params.id;
+	_user.delete(id, function (data) {res.send(data)})
+})
+routes.post('/user', urlencodedParser, (req, res) => {
+	var cred = req.body;
+	_user.save(cred, function (data) {res.send(data)})
+})
+routes.put('/user', urlencodedParser, (req, res) => {
+	var cred = req.body;
+	_user.update(cred, function (data) {res.send(data)})
+})
 
+// pegawai
+routes.get('/pegawai', (req, res) => {
+	_pegawai.getAll( function (data) {res.send(data)})
+})
+routes.get('/pegawai/:id', (req, res) => {
+	var id = req.params.id;
+	_pegawai.getOne( id, function (data) {res.send(data)})
+})
+routes.post('/pegawai',urlencodedParser,  (req, res) => {
+	var cred = req.body;
+	_pegawai.save( cred, function (data) {res.send(data)})
+})
+routes.put('/pegawai/:id',urlencodedParser,  (req, res) => {
+	var id = req.params.id;
+	var cred = req.body;
+	_pegawai.put( cred, id, function (data) {res.send(data)})
+})
+routes.delete('/pegawai/:id',  (req, res) => {
+	var id = req.params.id;
+	_pegawai.delete( id, function (data) {res.send(data)})
+})
 
 module.exports = routes;
